@@ -7,6 +7,7 @@ use App\Models\SellingModel;
 use App\Models\BuyingModel;
 use App\Models\MenusModel;
 use App\Models\UserModel;
+use Dompdf\Dompdf;
 
 class Transaction extends BaseController{
     protected $sellingModel;
@@ -68,11 +69,17 @@ class Transaction extends BaseController{
             'buying' => $amount,
             'fin_amount' => $final_amount
         ];
-
-        $this->buyingModel->save($buying);
-        $menuModel->save($menus);
         
-        return redirect()->to('transactions/buying');
+        $this->buyingModel->save($buying);
+        $buying['timestamp'] = date('d-m-Y_H-i-s');
+        $menuModel->save($menus);
+
+        $buying['title'] = 'Invoice';
+        $buying['type'] = 'Purchase';
+        $buying['menu_name'] = $menuModel->select('menu_name')->where('id', $this->request->getVar('menu_id'))->first();
+        
+        $this->generatePdf('pages/transaction/invoice', $buying);
+        return view('pages/transaction/invoice', $buying);
     }
 
     public function sellingData(){
@@ -128,9 +135,27 @@ class Transaction extends BaseController{
         ];
 
         $this->sellingModel->save($selling);
+        $selling['timestamp'] = date('d-m-Y_H-i-s'); 
         $menuModel->save($menus);
-        
-        return redirect()->to('transactions/selling');
+
+        $userModel = new UserModel();
+
+        $selling['title'] = 'Invoice';
+        $selling['employee_name'] = $userModel->select('username')->where('id', session('id'))->first();
+        $selling['menu_name'] = $menuModel->select('menu_name')->where('id', $this->request->getVar('menu_id'))->first();
+        $selling['type'] = 'Selling';
+
+        $this->generatePdf('pages/transaction/invoice', $selling);
+        return view('pages/transaction/invoice', $selling);
+    }
+
+    public function generatePdf($pages, $data){
+
+        $invoice = view($pages, $data);
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($invoice);
+        $dompdf->render();
+        $dompdf->stream($data['type'].'_'.$data['timestamp']);
     }
 
 

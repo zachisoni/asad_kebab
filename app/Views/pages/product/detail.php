@@ -7,12 +7,13 @@
   <img src="<?=base_url().'/img/'.$details['menu_image'];?>" alt="" srcset="" 
     class="h-96 w-96 object-cover rounded-xl mx-10">
     <div class="bg-white rounded-xl shadow-lg w-3/4 px-10 py-6 flex flex-col items-center">
-      <h2 class="text-2xl font-bold my-5 w-full"><?= $details['menu_name'] ?></h2>
-      <h3 class="text-sky-600 text-xl font-semibold w-full mb-4">Stock : <?= $details['fin_amount'] ?></h3>
+      <h2 class="text-2xl font-bold mt-5 w-full"><?= $details['menu_name'] ?></h2>
       <h3 class="text-xl font-semibold w-full text-orange-600">
         <?="Rp ".($details['price'] - floor($details['price']) > 0.0 ? $details['price']."00" : $details['price'].".000") ?>
       </h3>
+      <h3 class="text-sky-600 text-xl font-semibold w-full mb-2 mt-4">Stock : <?= $details['fin_amount'] ?></h3>
       <?php if(session("isLoggedIn") && session("role") == 1):?>
+        <h3 class="text-pink-600 text-xl font-semibold w-full mb-2">Sellings : <?= $details['selling'] ?></h3>
         <form action="<?= base_url("menu/delete/").$details['id'] ?>" method="post" 
             class="w-full flex flex-col items-center">
           <a href="<?= base_url("menu/edit/".$details['id'])?>" 

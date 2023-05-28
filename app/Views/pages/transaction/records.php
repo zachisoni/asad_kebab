@@ -1,15 +1,15 @@
 <?= $this->extend('./layouts/template'); ?>
 <?= $this->section('content'); ?>
 <article class="flex flex-col items-center">
-  <?php if(current_url() == site_url('transactions/buying')) :?>
-    <h1 class="text-2xl font-bold text-center w-full my-3">Buying Records</h1>
-    <a href="<?= base_url('transactions/buying/add') ?>" 
+  <?php if(current_url() == site_url('purchases')) :?>
+    <h1 class="text-2xl font-bold text-center w-full my-3">Purchases Records</h1>
+    <a href="<?= base_url('purchases/add') ?>" 
       class="py-2 px-6 bg-green-500 text-white font-semibold text-center rounded-lg text-lg my-2">
       Add Stock
     </a>
   <?php else :?>
     <h1 class="text-2xl font-bold text-center w-full my-3">Selling Records</h1>
-    <a href="<?= base_url('transactions/selling/add') ?>" 
+    <a href="<?= base_url('sellings/add') ?>" 
       class="py-2 px-6 bg-green-500 text-white font-semibold text-center rounded-lg text-lg my-2">
       Add Sell Transaction
     </a>
@@ -33,7 +33,7 @@
     </thead>
     <tbody class="bg-white text-center">
       <?php 
-      if(current_url() == site_url('transactions/buying')):
+      if(current_url() == site_url('purchases')):
         foreach($buying as $data): ?>
         <tr>
           <td class="border border-slate-300 border-colapse"><?= $data->id; ?></td>
