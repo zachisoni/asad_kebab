@@ -11,8 +11,9 @@
     <?php if(null !== validation_list_errors()):?>
       <div class="text-red-700 text-md text-center"><?= validation_list_errors(); ?></div>
     <?php endif; ?>
-    <p class="text-lg text-semibold"><?= date('d-m-Y', strtotime('+7 Hour')); ?></p>
+    <p class="text-lg text-semibold"><?= date('d-m-Y', strtotime('now')); ?></p>
     <table class="table-auto w-1/2 my-5">
+      <?php if(isset($members)) : ?>
       <tr>
         <td><label for="member_id" class="text-lg font-semibold">Member ID</label></td>
         <td>
@@ -20,6 +21,7 @@
             class="my-2 p-2 w-1/4 bg-slate-100 rounded-lg focus:border-none focus:outline-sky-400">
         </td>
       </tr>
+      <?php endif;?>
       <tr>
         <td><label for="menu_id" class="text-lg font-semibold">Menu</label></td>
         <td>
@@ -32,9 +34,11 @@
         </td>
       </tr>
       <tr>
-        <td><label for="cost" class="text-lg font-semibold">Price per unit</label></td>
+        <td><label for="cost" class="text-lg font-semibold">
+        <?= isset($members) ? 'Price ' : 'Cost ';?>per unit</label></td>
         <td class="flex items-center justify-left">
-          <input type="number" name="cost" id="cost" min="0.0" step="0.1" value="0.0" readonly
+          <input type="number" name="cost" id="cost" min="0.0" step="0.1" value="0.0" 
+            <?= isset($members) ? 'readonly' : ''; ?>
             class="my-2 p-2 w-1/4 bg-slate-100 rounded-lg focus:border-none focus:outline-sky-400 text-right">
           <p id="zeros">.000 </p>/ Unit
         </td>
@@ -54,7 +58,8 @@
         </td>
       </tr>
     </table>
-    <input type="submit" value="Add Stock" onclick="return confirm('Are you sure want to make transaction?');"
+    <input type="submit" value="Add <?= isset($members) ? 'Transaction' : 'Stock' ?>" 
+      onclick="return confirm('Are you sure want to make transaction?');"
       class=" my-2 px-6 py-3 bg-sky-500 text-sky-50 font-semibold text-lg rounded-lg 
         hover:bg-sky-600 hover:text-white transition duration-500">
   </form>
@@ -62,22 +67,25 @@
 
 <script src="/js/priceZeros.js"></script>
 <script>
-
+  
   const menuId = document.getElementById('menu_id');
   const totalCost = document.getElementById('total');
   const amount = document.getElementById('amount');  
-
+  
   let total = 0.0;
+<?php if (isset($menus[0]->price)) : ?>
   let prices = [
     <?php foreach ($menus as $menu ):?>
       <?= $menu->price?>,
-    <?php endforeach;?>
-  ];
-
+      <?php endforeach;?>
+    ];
+    
   document.addEventListener('DOMContentLoaded', event=>{
     cost.value = prices[menuId.value - 1];
   })
+<?php endif;?>
 
+<?php if (isset($menus[0]->price)) : ?>
   menuId.addEventListener('change', event =>{
     cost.value = prices[menuId.value - 1];
     zero.innerText = cost.value - Math.floor(cost.value) == 0 ? ".000" : "00"
@@ -86,7 +94,15 @@
     totalCost.innerHTML = `Rp ${total}`;
     totalCost.innerHTML += total - Math.floor(total) == 0 ? '.000' : '00';
   });
+<?php endif;?>
 
+  cost.addEventListener('change', event=>{
+    total = (cost.value * amount.value);
+    total = total - Math.floor(total) > 0 ? total.toFixed(1) : total;
+    totalCost.innerHTML = `Rp ${total}`;
+    totalCost.innerHTML += total - Math.floor(total) == 0 ? '.000' : '00';
+  });
+  
   amount.addEventListener('change', event => {
     total = (cost.value * amount.value);
     total = total - Math.floor(total) > 0 ? total.toFixed(1) : total;

@@ -37,6 +37,10 @@ class Transactions extends Migration
                 'constraint' => 5,
                 'unsigned' => true,
             ],
+            'cost' => [
+                'type' => 'FLOAT',
+            ]
+            ,
             'total_cost' => [
                 'type' => 'FLOAT'
             ],
@@ -67,6 +71,9 @@ class Transactions extends Migration
                 'type' => 'INT',
                 'constraint' => 5,
                 'unsigned' => true,
+            ],
+            'cost' => [
+                'type' => 'FLOAT',
             ],
             'total_cost' => [
                 'type' => 'FLOAT'

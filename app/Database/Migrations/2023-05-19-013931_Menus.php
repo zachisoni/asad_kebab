@@ -74,6 +74,11 @@ class Menus extends Migration
             'details' => [
                 'type' => 'TEXT',
             ],
+            'status' => [
+                'type' => 'VARCHAR',
+                'constraint' => '11',
+                'null' => true,
+            ],
         ]);
 
         $this->forge->addKey('id', true);
