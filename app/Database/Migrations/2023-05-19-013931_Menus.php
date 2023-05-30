@@ -46,7 +46,9 @@ class Menus extends Migration
                 'unsigned' => true,
             ],
             'price' => [
-                'type' => 'FLOAT'
+                'type' => 'INT',
+                'constraint' => 12,
+                'unsigned' => true,
             ],
             'menu_image' => [
                 'type' => 'VARCHAR',
@@ -62,7 +64,7 @@ class Menus extends Migration
                 'constraint' => 11,
                 'null' => true
             ],
-            'buying' => [
+            'purchase' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => true

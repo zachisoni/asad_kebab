@@ -33,13 +33,13 @@ class Auth extends BaseController
 
         // Mengambil data username dan password dari POST Request yang telah di submit user di view login
         $data = [
-            'username' => $this->request->getPost('username'),
+            'email' => $this->request->getPost('email'),
             'password' => $this->request->getPost('password'),
         ];
 
         // Mencocokan username yang dimasukkan dengan yang ada di database
         // Jika ada, Simpan data row tersebut di variable $user
-        $user = $userModel->where('username', $data['username'])->first();
+        $user = $userModel->where('email', $data['email'])->first();
 
         // Jika User ditemukan
         if($user){
@@ -54,24 +54,28 @@ class Auth extends BaseController
                 // Agar dapat diakses di tiap page.
                 session()->set([
                     'id' => $user['id'],
-                    'username' => $user['username'],
                     'email' => $user['email'],
+                    'fullname' => $user['fullname'],
                     'role' => $user['role'],
                     'isLoggedIn' => TRUE
                 ]);
 
                 // Redirect ke halaman utama
-                return redirect()->to('/dashboard');
+                if(session('role') == 1){
+                    return redirect()->to('/dashboard');
+                }else {
+                    return redirect()->to(base_url());
+                }
                 // return "BERHASIL LOGIN";
             }
-                // Jika Password salah, Berikan pesan dan redirect ke halaman login
-                session()->setFlashdata('msg', 'Password is incorrect.');
-                return redirect()->back()->withInput();
-                // return "GAGAL LOGIN";
+            // Jika Password salah, Berikan pesan dan redirect ke halaman login
+            session()->setFlashdata('msg', 'Password is incorrect.');
+            return redirect()->back()->withInput();
+            // return "GAGAL LOGIN";
         }               
         
         // Jika Username tidak ditemukan, Berikan pesan dan redirect ke halaman login
-        session()->setFlashdata('msg', 'Username is incorrect.');
+        session()->setFlashdata('msg', 'Email is incorrect.');
         return redirect()->back()->withInput();
         // return "GAGAL LOGIN";
     }
@@ -95,7 +99,7 @@ class Auth extends BaseController
         helper('form');
         // Peraturan untuk validasi form
         $rules = [
-            'username' => 'required',
+            'fullname' => 'required',
             'email'    => 'required|valid_email',
             'password' => 'required|min_length[6]',
             'passconf' => 'required|matches[password]',
@@ -111,8 +115,9 @@ class Auth extends BaseController
 
             // Jika berhasil validasi, maka simpan semua data di $data
             $data = [
-                'username' => $this->request->getVar('username'),
+                'fullname' => $this->request->getVar('fullname'),
                 'email'    => $this->request->getVar('email'),
+                'role' => 1,
                 //Hashing password agar terenkripsi 
                 'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
             ];

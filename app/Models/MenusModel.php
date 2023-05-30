@@ -19,7 +19,7 @@ class MenusModel extends Model
                                     'menu_image', 
                                     'init_amount', 
                                     'selling', 
-                                    'buying', 
+                                    'purchase', 
                                     'fin_amount',
                                     'details',
                                     'status',

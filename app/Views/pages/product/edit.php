@@ -23,10 +23,9 @@
       <tr>
         <td><label for="price" class="text-lg font-semibold">Price</label></td>
         <td class="flex items-center">Rp 
-          <input type="number" name="price" id="cost" step="0.1" min="0.0" 
-            value="<?= isset($menu_data) ? $menu_data['price'] : "0.0"?>"
-            class="my-2 p-2 w-20 bg-slate-100 rounded-lg ml-2 focus:border-none focus:outline-sky-400 text-right">
-            <p id="zeros">.000</p>
+          <input type="number" name="price" id="cost" min="0" 
+            value="<?= isset($menu_data) ? $menu_data['price'] : "0"?>"
+            class="my-2 p-2 w-1/4 bg-slate-100 rounded-lg ml-2 focus:border-none focus:outline-sky-400">
         </td>
       </tr>
       <tr>

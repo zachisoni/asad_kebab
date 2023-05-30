@@ -4,12 +4,12 @@
 <article class="flex items-start justify-center px-24">
   <p id="menu_id" hidden><?= $details['id']?></p>
   <p id="menu_name" hidden><?= $details['menu_name']?></p>
-  <img src="<?=base_url().'/img/'.$details['menu_image'];?>" alt="" srcset="" 
+  <img src="<?=base_url('img/').$details['menu_image'];?>" alt="" srcset="" 
     class="h-96 w-96 object-cover rounded-xl mx-10">
     <div class="bg-white rounded-xl shadow-lg w-3/4 px-10 py-6 flex flex-col items-center">
       <h2 class="text-2xl font-bold mt-5 w-full"><?= $details['menu_name'] ?></h2>
       <h3 class="text-xl font-semibold w-full text-orange-600">
-        <?="Rp ".($details['price'] - floor($details['price']) > 0.0 ? $details['price']."00" : $details['price'].".000") ?>
+        <?="Rp ".$details['price']; ?>
       </h3>
       <h3 class="text-sky-600 text-xl font-semibold w-full mb-2 mt-4">Stock : <?= $details['fin_amount'] ?></h3>
       <?php if(session("isLoggedIn") && session("role") == 1):?>
@@ -26,14 +26,6 @@
             class="my-3 px-6 py-3 bg-rose-600 rounded-lg text-lg font-semibold text-white w-1/2 text-center
               hover:bg-red-700 transition duration-600">
         </form>
-      <?php elseif(session("isLoggedIn") && session("role") == 2) :?>
-        <br>
-      <?php else :?>
-        <a href="#" 
-          class="my-3 px-6 py-3 bg-orange-600 rounded-lg text-lg font-semibold text-white w-1/2 text-center
-          hover:bg-orange-700 transition duration-600">
-          Order Now
-        </a>
       <?php endif; ?>
       <div class="py-5 px-5 bg-slate-50 rounded-lg w-5/6">
         <h3 class="text-lg font-semibold my-3">Details</h3>

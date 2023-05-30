@@ -5,10 +5,7 @@
   <?php if(session("isLoggedIn") && session("role") == 1):?>
     <a class="text-white bg-sky-600 font-semibold py-2 px-6 rounded-lg text-center"
       href="<?= base_url('menu/add') ?>">Add New Menu</a>
-    <a href="<?= base_url('purchases/add') ?>" 
-      class="py-2 px-6 bg-green-500 text-white font-semibold text-center rounded-lg text-lg my-4">
-      Add Stock
-    </a>
+     
   <?php endif;?>
 </section>
 
@@ -20,14 +17,11 @@
         <a href="<?= base_url('menu/').$food->id ?>" 
           class="rounded-lg shadow-lg my-4 mx-4 bg-white w-40 h-80 hover:scale-105 transition duration-500">
           <img class="rounded-t-lg w-full h-1/2 object-cover"
-              src='http://localhost:8080/img/<?= $food->menu_image;?>' 
+              src="<?= base_url('img/'). $food->menu_image ?>"
               alt="<?= $food->menu_name;?>">
           <div class="py-6 px-3 h-1/2 flex flex-col justify-between">
             <h2 class="text-xl my-3 font-semibold"><?= $food->menu_name;?></h2>
-            <p class="text-orange-700">
-              Rp 
-              <?= ($food->price - floor($food->price) > 0.0 ? $food->price."00" : $food->price.".000") ?>
-            </p>
+            <p class="text-orange-700">Rp <?=$food->price?></p>
             <p class="text-sky-600">Stock : <?= $food->fin_amount ?></p>
           </div>
         </a>
@@ -48,7 +42,7 @@
         <a href="<?= base_url('menu/').$drink->id ?>" 
           class="rounded-lg shadow-lg my-4 mx-4 bg-white w-40 h-80">
           <img class="rounded-t-lg w-full h-40 object-cover"
-              src='http://localhost:8080/img/<?= $drink->menu_image;?>' 
+              src="<?= base_url('img/'). $drink->menu_image ?>" 
               alt="<?= $drink->menu_name;?>">
           <div class="py-6 px-3 h-1/2 flex flex-col justify-between">
             <h2 class="text-xl my-3 font-semibold"><?= $drink->menu_name;?></h2>

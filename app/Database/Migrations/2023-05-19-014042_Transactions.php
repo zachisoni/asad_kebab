@@ -26,34 +26,24 @@ class Transactions extends Migration
                 'constraint' => 12,
                 'unsigned' => true,
             ],
-            'menu_id' => [
-                'type' => 'INT',
-                'constraint' => 11,
-                'unsigned' => true,
-                'null' => true,
+            'transaction_type' => [
+                'type' => 'VARCHAR',
+                'constraint' => '10',
             ],
-            'amount' => [
-                'type' => 'INT',
-                'constraint' => 5,
-                'unsigned' => true,
-            ],
-            'cost' => [
-                'type' => 'FLOAT',
-            ]
-            ,
             'total_cost' => [
-                'type' => 'FLOAT'
+                'type' => 'INT',
+                'constraint' => 12,
+                'unsigned' => true,
             ],
             'timestamp' => [
                 'type' => 'TIMESTAMP',
-            ]
+            ],
         ]);
 
         $this->forge->addKey('id', true);
         $this->forge->addForeignKey('user_id', 'users', 'id');
         $this->forge->addForeignKey('employee_id', 'users', 'id');
-        $this->forge->addForeignKey('menu_id', 'menus', 'id');
-        $this->forge->createTable('selling');
+        $this->forge->createTable('transactions');
 
         $this->forge->addField([
             'id' => [
@@ -62,6 +52,11 @@ class Transactions extends Migration
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
+            'transaction_id' =>[
+                'type' => 'INT',
+                'constraint' => 12,
+                'unsigned' => true,
+            ],
             'menu_id' => [
                 'type' => 'INT',
                 'constraint' => 11,
@@ -72,26 +67,63 @@ class Transactions extends Migration
                 'constraint' => 5,
                 'unsigned' => true,
             ],
-            'cost' => [
-                'type' => 'FLOAT',
-            ],
             'total_cost' => [
-                'type' => 'FLOAT'
+                'type' => 'INT',
+                'constraint' => 12,
+                'unsigned' => true,
             ],
-            'timestamp' => [
-                'type' => 'TIMESTAMP',
-            ]
+            
         ]);
 
         $this->forge->addKey('id', true);
         $this->forge->addForeignKey('menu_id', 'menus', 'id');
-        $this->forge->createTable('buying');
+        $this->forge->addForeignKey('transaction_id', 'transactions', 'id');
+        $this->forge->createTable('sellings');
+
+        $this->forge->addField([
+            'id' => [
+                'type' => 'INT',
+                'constraint' => 12,
+                'unsigned' => true,
+                'auto_increment' => true,
+            ],
+            'transaction_id' =>[
+                'type' => 'INT',
+                'constraint' => 12,
+                'unsigned' => true,
+            ],
+            'menu_id' => [
+                'type' => 'INT',
+                'constraint' => 11,
+                'unsigned' => true,
+            ],
+            'price' => [
+                'type' => 'INT',
+                'constraint' => 12,
+                'unsigned' => true,
+            ],
+            'amount' => [
+                'type' => 'INT',
+                'constraint' => 5,
+                'unsigned' => true,
+            ],
+            'total_cost' => [
+                'type' => 'FLOAT'
+            ],
+        ]);
+
+        $this->forge->addKey('id', true);
+        $this->forge->addForeignKey('menu_id', 'menus', 'id');
+        $this->forge->addForeignKey('transaction_id', 'transactions', 'id');
+        $this->forge->createTable('purchases');
+
 
     }
 
     public function down()
     {
-        $this->forge->dropTable('selling');
-        $this->forge->dropTable('buying');
+        $this->forge->dropTable('sellings');
+        $this->forge->dropTable('purchases');
+        $this->forge->dropTable('transactions');
     }
 }

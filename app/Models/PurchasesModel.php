@@ -4,19 +4,16 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class SellingModel extends Model
+class PurchasesModel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'sellings';
+    protected $table            = 'purchases';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [ 'transaction_id',
-                                    'menu_id', 
-                                    'amount', 
-                                    'total_cost'];
+    protected $allowedFields    = ['menu_id', 'amount', 'total_cost', 'transaction_id', 'cost'];
 
     // Dates
     protected $useTimestamps = false;

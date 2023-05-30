@@ -44,10 +44,13 @@ $routes->post('/menu/saveNew', 'Menu::saveMenu');
 $routes->post('/menu/save/(:num)', 'Menu::saveMenu/$1');
 $routes->post('/menu/delete/(:num)', 'Menu::deleteMenu/$1');
 
-$routes->get('/purchases', 'Transaction::buyingData');
-$routes->get('/purchases/add', 'Transaction::buyingForm');
+$routes->get('/purchases', 'Transaction::purchaseData');
 $routes->get('/sellings', 'Transaction::sellingData');
+$routes->get('/purchases/add', 'Transaction::purchaseForm');
 $routes->get('/sellings/add', 'Transaction::sellingForm');
+$routes->get('/purchases/detail/(:num)', 'Transaction::purchaseDetail/$1');
+$routes->get('/sellings/detail/(:num)', 'Transaction::sellingDetail/$1');
+
 $routes->get('/pdf/generate', 'Transaction::generatePdf');
 $routes->post('/transaction/add_stock', 'Transaction::addStock');
 $routes->post('/transaction/add_transaction', 'Transaction::addTransaction');

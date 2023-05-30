@@ -32,12 +32,12 @@ class AddUser extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'username' => [
+            'email' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '255',
                 'unique'     => true,
             ],
-            'email' => [
+            'fullname' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '255',
             ],

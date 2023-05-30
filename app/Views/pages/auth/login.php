@@ -21,7 +21,7 @@
 
   <form action="login/auth" method="post" 
         class="flex flex-col text-lg items-center justify-center w-full">
-    <input type="text" name="username" id="username" placeholder="Username" 
+    <input type="email" name="email" id="email" placeholder="Email" 
           class="placeholder:italic text-center my-2 w-3/4 bg-white border border-slate-300 p-2 rounded-lg focus:outline-sky-400">
     <input type="password" name="password" id="password" placeholder="password" 
           class="placeholder:italic text-center my-2 w-3/4 bg-white border border-slate-300 p-2 rounded-lg focus:outline-sky-400">

@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
 
         $data = [
             [
-                'username' => 'admin',
+                'fullname' => 'admin',
                 'role' => 1,
                 'email' => 'admin@admin.com',
                 'password' => password_hash('admin', PASSWORD_DEFAULT),
@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
 
         foreach($data as $user){
             $this->db->table('users')->insert([
-                'username' => $user['username'],
+                'fullname' => $user['fullname'],
                 'email' => $user['email'],
                 'role' => $user['role'],
                 'password' => $user['password'],
