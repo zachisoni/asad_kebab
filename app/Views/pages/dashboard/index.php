@@ -6,7 +6,6 @@
   $balance = $sellings[0]->selling - $purchases[0]->purchase;
 ?>
 <h1 class="text-2xl font-bold w-full text-center">Dashboard</h1>
-<?= password_hash('tezt123', PASSWORD_DEFAULT); ?>
 <article class="py-4 px-2 w-full flex items-center justify-around flex-wrap">
   <div class="text-xl font-semibold text-green-600 bg-white shadow-lg flex rounded-lg m-4 basis-full">
     <h2 class="bg-green-600 px-8 py-3 text-white rounded-l-lg">Total Menu</h2>
