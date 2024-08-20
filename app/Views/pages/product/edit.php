@@ -3,13 +3,15 @@
 <article class="flex justify-center w-full">
   <?php $addOrEdit = isset($menu_data) ? "Edit Menu" : "Add Menu"; ?>
   
-  <form method="post" enctype="multipart/form-data"
+  <form method="post" enctype="multipart/form-data" id="editForm"
     action="<?= isset($menu_data) ? base_url('menu/save/'.$menu_data['id']) : base_url('menu/saveNew') ?>" 
     class="w-3/4 rounded-xl bg-white shadow-lg py-10 flex flex-col items-center">
     <h1 class="text-2xl font-bold mb-6"><?= $addOrEdit ?></h1>
     <?php if(null !== validation_list_errors()):?>
       <div class="text-red-700 text-md text-center"><?= validation_list_errors(); ?></div>
     <?php endif; ?>
+    <input type="text" hidden name="imageUrl" value="<?= isset($menu_data) ? $menu_data['menu_image'] : ''; ?>" 
+      id="imageUrl"/>
     <table class="table-auto w-5/6 my-5">
       <tr class="px-5">
         <td><label for="menu_name" class="text-lg font-semibold">Menu Name</label></td>
@@ -54,11 +56,11 @@
         <td><label for="menu_image" class="text-lg font-semibold">Menu Image</label></td>
         <td>
           <input type="file" name="menu_image" id="menu_image" onchange="previewImage(this);"
-              class="file:my-2 file:py-2 file:px-4 w-3/4 file:bg-slate-800 transition duration-600
-              file:rounded-full file:border-none file:text-white hover:file:bg-slate-700">
+            class="file:my-2 file:py-2 file:px-4 w-3/4 file:bg-slate-800 transition duration-600
+            file:rounded-full file:border-none file:text-white hover:file:bg-slate-700">
 
           <img alt="" id="image_preview" class="w-80 object-cover rounded-xl"
-            src="<?= isset($menu_data) ? base_url().'/img/'.$menu_data['menu_image'] : "#" ?>">
+            src="<?= isset($menu_data) ? $_ENV['IMAGE_URL'].$menu_data['menu_image'] : "#" ?>">
         </td>
       </tr>
       <tr>
@@ -75,22 +77,47 @@
  </form>
 </article>
 
-<script src="/js/priceZeros.js"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
+  const editForm = document.getElementById('editForm');
   const menuType = document.getElementById('menu_type');
-
-  menuType.addEventListener("change", event => {
-    console.log("Menu Type : " + menuType.value);
-  });
-
   const imagePreview = document.getElementById('image_preview');
+  const imageInput = document.getElementById('menu_image');
+  const imageUrl = document.getElementById('imageUrl');
+
+  editForm.addEventListener("submit",async (event) => {
+    const {data, error} = await uploadFile();
+    if (error){
+      console.log("erorr uploading image:" ,error);
+      alert("erorr uploading image:" ,error);
+    } else {
+      console.log("sucess upload image");
+    }
+  })
+
+  const {createClient} = supabase;
+
+  const _supabase = createClient("<?=$_ENV['SUPABASE_URL']?>", "<?=$_ENV['SUPABASE_API_KEY']?>" )
+  // Upload file using standard upload
+
+  async function uploadFile() {
+    const imgFile = imageInput.files[0]
+    const filetype = imgFile.name.split('.').pop();
+    const filename = Date.now().toString() + imgFile.name.split('').reduce((hash, char) => {
+      return char.charCodeAt(0) + (hash << 6) + (hash << 16) - hash;
+    }, 0) + '.' + filetype;
+    imageUrl.value = filename;
+    const { data, error } = await _supabase.storage
+                              .from('/img')
+                              .upload(`menus/${filename}`, imgFile, {contentType: `image/${filetype}`})
+    return {data, error}
+  }
 
   function previewImage(input){
     let imageSrc = URL.createObjectURL(input.files[0]);
     imagePreview.classList.add("h-80");
     imagePreview.src = imageSrc;
   }
-
 </script>
 
 <?= $this->endSection(); ?>

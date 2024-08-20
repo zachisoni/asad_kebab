@@ -4,7 +4,7 @@
 <article class="flex items-start justify-center px-24">
   <p id="menu_id" hidden><?= $details['id']?></p>
   <p id="menu_name" hidden><?= $details['menu_name']?></p>
-  <img src="<?=base_url('img/').$details['menu_image'];?>" alt="" srcset="" 
+  <img src="<?=$_ENV['IMAGE_URL'].$details['menu_image'];?>" alt="" srcset="" 
     class="h-96 w-96 object-cover rounded-xl mx-10">
     <div class="bg-white rounded-xl shadow-lg w-3/4 px-10 py-6 flex flex-col items-center">
       <h2 class="text-2xl font-bold mt-5 w-full"><?= $details['menu_name'] ?></h2>

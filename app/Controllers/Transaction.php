@@ -39,7 +39,7 @@ class Transaction extends BaseController{
         $data['title'] = 'Asad Kebab | Transaction Detail';
         $data['header'] = $this->transactionsModel->select('transactions.id, users.fullname, total_cost, timestamp, transaction_type')->join('users', 'users.id = employee_id')->where('transactions.id',$id)->get()->getResult();
         $data['details'] = $this->purchasesModel->orderBy('id ASC')->select('purchases.id, menus.menu_name, purchases.price, amount, total_cost')->join('menus', 'menus.id = menu_id')->where('transaction_id', $id)->get()->getResult();
-        return view('pages/transaction/invoice', $data);
+        return view('pages/transaction/detail', $data);
     }
 
     public function purchaseForm(){
@@ -78,12 +78,10 @@ class Transaction extends BaseController{
             $purchase = [
                 'transaction_id' => $trans_id,
                 'menu_id' => $this->request->getVar("menu_id[$i]"),
-                'price' => $cost,
-                'amount' => $amount,
+                'price' => (int)$cost,
+                'amount' => (int)$amount,
                 'total_cost' => $cost * $amount,
             ];
-
-            dd($purchase);
             
             $this->purchasesModel->save($purchase);
 
@@ -93,7 +91,7 @@ class Transaction extends BaseController{
 
             $menus = [
                 'id' => $this->request->getVar("menu_id[$i]"),
-                'buying' => $buyingMenu,
+                'purchase' => $buyingMenu,
                 'fin_amount' => $final_amount,
             ];
             $menuModel->save($menus);  
@@ -123,7 +121,7 @@ class Transaction extends BaseController{
         $data['header'] = $this->transactionsModel->select('transactions.id, users.fullname, total_cost, timestamp, transaction_type')->join('users', 'users.id = employee_id')->where('transactions.id',$id)->get()->getResult();
         $data['details'] = $this->sellingModel->orderBy('id ASC')->select('sellings.id, menus.menu_name, menus.price, amount, total_cost')->join('menus', 'menus.id = menu_id')->where('transaction_id', $id)->get()->getResult();
         // dd($data);
-        return view('pages/transaction/invoice', $data);
+        return view('pages/transaction/detail', $data);
     }
 
     public function sellingForm(){
@@ -190,7 +188,7 @@ class Transaction extends BaseController{
 
             $menus = [
                 'id' => $this->request->getVar("menu_id[$i]"),
-                'buying' => $sellingMenu,
+                'selling' => $sellingMenu,
                 'fin_amount' => $final_amount,
             ];
             $menuModel->save($menus);   

@@ -17,11 +17,11 @@
         <a href="<?= base_url('menu/').$food->id ?>" 
           class="rounded-lg shadow-lg my-4 mx-4 bg-white w-40 h-80 hover:scale-105 transition duration-500">
           <img class="rounded-t-lg w-full h-1/2 object-cover"
-              src="<?= base_url('img/'). $food->menu_image ?>"
+              src="<?= $_ENV['IMAGE_URL']. $food->menu_image ?>"
               alt="<?= $food->menu_name;?>">
           <div class="py-6 px-3 h-1/2 flex flex-col justify-between">
             <h2 class="text-xl my-3 font-semibold"><?= $food->menu_name;?></h2>
-            <p class="text-orange-700">Rp <?=$food->price?></p>
+            <p class="text-orange-700 price"><?=$food->price?></p>
             <p class="text-sky-600">Stock : <?= $food->fin_amount ?></p>
           </div>
         </a>
@@ -42,14 +42,11 @@
         <a href="<?= base_url('menu/').$drink->id ?>" 
           class="rounded-lg shadow-lg my-4 mx-4 bg-white w-40 h-80">
           <img class="rounded-t-lg w-full h-40 object-cover"
-              src="<?= base_url('img/'). $drink->menu_image ?>" 
+              src="<?= $_ENV['IMAGE_URL']. $drink->menu_image ?>" 
               alt="<?= $drink->menu_name;?>">
           <div class="py-6 px-3 h-1/2 flex flex-col justify-between">
             <h2 class="text-xl my-3 font-semibold"><?= $drink->menu_name;?></h2>
-            <p class="text-orange-700">
-              Rp 
-              <?= ($drink->price - floor($drink->price) > 0.0 ? $drink->price."00" : $drink->price.".000") ?>
-            </p>
+            <p class="text-orange-700 price"><?= $drink->price ?></p>
             <p class="text-sky-600">Stock : <?= $drink->fin_amount ?></p>
           </div>
         </a>
@@ -61,5 +58,14 @@
     <?php endif;?>
   </div>
 </section>
+<script>
+  const prices = document.getElementsByClassName('price')
+  document.addEventListener('DOMContentLoaded',() => {
+    for (const price of prices) {
+      const priceNum = Number(price.innerHTML)
+      price.innerHTML = 'Rp ' + priceNum.toLocaleString('id-ID')
+    }
+  })
+</script>
 
 <?= $this->endSection(); ?>

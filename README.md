@@ -19,13 +19,16 @@ After you have installed programs above, you can follow these steps to intall th
 
 3. Open your terminal / cmd, and change to directory where you want this app is installed using `cd` and followed by directory name
 
-4. Clone this repository. In your ter
+4. Clone this repository. In your terminal
+
         git clone https://github.com/zachisoni/asad_kebab.git
 
 5. Install packages in this projects
+
         composer install
 
 6. Make environment variable
+
         cp env .env
 
 7. Open .env, and uncomment line 17 (CI_ENVIRONMENT), 23 - 27 (app information), and 33 - 39 (database information). 
@@ -35,13 +38,9 @@ After you have installed programs above, you can follow these steps to intall th
 9. Replace `database.default.port` value with your MySQL port number. By default, the port is 3306
 
 10. Migrate the database. In your terminal, open the project directory, and type
-        php spark migrate --all
-    
-11. Seed the database. In terminal:
-        php spark db:seed TypeSeeder
 
-    and
-        php spark db:seed UserSeeder
+        php spark migrate --all
 
 12. Start server
+        
         php spark serve

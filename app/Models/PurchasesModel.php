@@ -13,7 +13,7 @@ class PurchasesModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['menu_id', 'amount', 'total_cost', 'transaction_id', 'cost'];
+    protected $allowedFields    = ['menu_id', 'amount', 'total_cost', 'transaction_id', 'price'];
 
     // Dates
     protected $useTimestamps = false;

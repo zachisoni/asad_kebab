@@ -60,26 +60,32 @@ class Menu extends BaseController
             'menu_name' => 'required',
             'price' => 'required',
             'init_amount' => 'required',
-            'menu_image' => 'uploaded[menu_image]|max_size[menu_image,1024]|is_image[menu_image]|mime_in[menu_image,image/jpeg,image/jpg,image/png,image/gif]',
+            'imageUrl' => 'required'
         ];
 
         if(!$this->validate($rules)){
             return redirect()->back()->withInput(validation_errors());
         }
 
-        $menu_image = $this->request->getFile('menu_image');
-        $menu_image->move('img');
-
         $data = [
             'menu_name' => $this->request->getvar('menu_name'),
             'price' => $this->request->getVar('price'),
+            'menu_image' => $this->request->getVar('imageUrl'),
             'init_amount' => $this->request->getVar('init_amount'),
             'menu_type' => $this->request->getVar('menu_type'),
-            'menu_image' => $menu_image->getName(),
             'fin_amount' => $this->request->getVar('init_amount'),
             'details' => $this->request->getVar('details'),
             'status' => 'active',
         ];
+
+
+        // try {
+        //     $menu_image = $this->request->getFile('menu_image');
+        //     $data['menu_image'] = $menu_image->getRandomName();
+        // } catch (\Throwable $th) {
+        //     $data['menu_image'] = $this->request->getVar('oldFile');
+        // }
+
         if($id !== 0){
             $data['id'] = $id;
         }

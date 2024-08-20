@@ -44,6 +44,8 @@ $RECYCLE.BIN/
 .env
 .vagrant
 Vagrantfile
+node_modules
+public/img/
 
 #-------------------------
 # Temporary Files

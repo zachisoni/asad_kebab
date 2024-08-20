@@ -23,7 +23,7 @@
           <th class="px-3 py-2 border border-slate-300 border-colapse">Employee ID</th>
         <?php endif;?>
         <th class="px-3 py-2 border border-slate-300 border-colapse">Total Cost</th>
-        <th class="px-3 py-2 border border-slate-300 border-colapse">Timestamp</th>
+        <th class="px-4 py-2 border border-slate-300 border-colapse">Timestamp</th>
         <th class="px-3 py-2 border border-slate-300 border-colapse">Action</th>
       </tr>
     </thead>
@@ -33,10 +33,10 @@
         foreach($purchase as $data): ?>
         <tr>
           <td class="border border-slate-300 border-colapse"><?= $data->id; ?></td>
-          <td class="border border-slate-300 border-colapse"><?= $data->total_cost?></td>
-          <td class="border border-slate-300 border-colapse"><?= $data->timestamp; ?></td>
+          <td class="border border-slate-300 border-colapse total_cost"><?= $data->total_cost?></td>
+          <td class="px-3 border border-slate-300 border-colapse"><?= $data->timestamp; ?></td>
           <td class="px-3 py-2 border border-slate-300 border-colapse">
-            <a href="<?= base_url('purchases/detail/').$data->id ?>" class="bg-blue-600 text-white px-6 py-2 rounded-xl">Details</a>
+            <a href="<?= base_url('purchases/detail/').$data->id ?>" class="font-bold text-blue-600 px-6 py-2 rounded-xl">Details</a>
           </td>
         </tr>
       <?php endforeach; else : 
@@ -45,10 +45,10 @@
             <td class="border border-slate-300 border-colapse"><?= $data->id; ?></td>
             <td class="border border-slate-300 border-colapse"><?= $data->user_id; ?></td>
             <td class="border border-slate-300 border-colapse"><?= $data->employee_id; ?></td>
-            <td class="border border-slate-300 border-colapse"><?= $data->total_cost?></td>
-            <td class="border border-slate-300 border-colapse"><?= $data->timestamp; ?></td>
+            <td class="border border-slate-300 border-colapse total_cost"><?= $data->total_cost?></td>
+            <td class="px-3 border border-slate-300 border-colapse"><?= $data->timestamp; ?></td>
             <td class="px-3 py-2 border border-slate-300 border-colapse">
-              <a href="<?= base_url('sellings/detail/').$data->id ?>" class="bg-blue-600 text-white px-6 py-2 rounded-xl">Details</a>
+              <a href="<?= base_url('sellings/detail/').$data->id ?>" class="font-bold text-blue-600 px-6 py-2 rounded-xl">Details</a>
             </td>
           </tr>
       <?php endforeach; 
@@ -58,5 +58,11 @@
   </table>
 </article>
 
+<script>
+  const totals = document.getElementsByClassName('total_cost')
+  for (const total of totals) {
+    total.innerText = 'Rp ' + (Number(total.innerText).toLocaleString('id-ID'))
+  }
+</script>
 
 <?= $this->endSection(); ?>

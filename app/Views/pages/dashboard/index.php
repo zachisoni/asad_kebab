@@ -31,24 +31,36 @@
     <div class="px-8 py-3 rounded-t-xl basis-full">
       <h2 class="text-cyan-600 rounded-tl-xl text-left">Balance</h2>
       <h2 class="rounded-tr-xl text-center 
-        <?= $balance > 0 ? 'text-sky-600' : 'text-rose-600' ?> text-2xl">
-      Rp <?=$balance?>
+        <?= $balance > 0 ? 'text-sky-600' : 'text-rose-600' ?> text-2xl" id='balance'>
+      <?=$balance?>
       </h2>
     </div>
     <div class="px-8 py-3 basis-1/2 text-white bg-cyan-600 rounded-bl-xl">
       <h2>Income</h2>
-      <h2 class="text-center text-2xl">
-        Rp <?= $sellings[0]->selling ;?>
+      <h2 class="text-center text-2xl" id='income'>
+        <?= $sellings[0]->selling ;?>
       </h2>
     </div>
     <div class="px-8 py-3 basis-1/2 text-white bg-red-600 rounded-br-xl">
       <h2>Outcome</h2>
-      <h2 class="text-center text-2xl">
-        Rp <?= $purchases[0]->purchase;?>
+      <h2 class="text-center text-2xl" id='outcome'>
+        <?= $purchases[0]->purchase;?>
       </h2>
     </div>
   </div>
     
 </article>
+
+<script>
+  const balance = document.getElementById('balance');
+  const income = document.getElementById('income');
+  const outcome = document.getElementById('outcome');
+
+  balance.innerText = Number(balance.innerText) < 0 ? '- Rp ' + (Number(balance.innerText) * -1).toLocaleString('id-ID') : 'Rp ' + (Number(balance.innerText)).toLocaleString('id-ID');
+  income.innerText = 'Rp ' + (Number(income.innerText)).toLocaleString('id-ID');
+  outcome.innerText = 'Rp ' + (Number(outcome.innerText)).toLocaleString('id-ID');
+
+
+</script>
 
 <?= $this->endSection(); ?>

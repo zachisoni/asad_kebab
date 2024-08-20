@@ -13,13 +13,13 @@
 
   <form action="<?= base_url('register/store') ?>" method="POST"
         class="flex flex-col text-lg items-center justify-center w-full text-left">
-    <label for="username" class="w-5/6 flex justify-between items-center">
-      Username
-      <input type="text" name="username" id="username" placeholder="Username"
+    <label for="fullname" class="w-5/6 flex justify-between items-center">
+      Full Name
+      <input type="text" name="fullname" id="fullname" placeholder="Full Name"
         class="placeholder:italic text-left my-2 w-3/4 bg-white border border-slate-300 p-2 rounded-lg focus:outline-sky-400">
     </label>
-    <?php if(null != validation_show_error('username')) :?>  
-      <p class="text-red-600 italic text-left mb-4"><?= validation_show_error('username'); ?></p>
+    <?php if(null != validation_show_error('fullname')) :?>  
+      <p class="text-red-600 italic text-left mb-4"><?= validation_show_error('fullname'); ?></p>
     <?php endif;?>
     
     <label for="email" class="w-5/6 flex justify-between items-center">

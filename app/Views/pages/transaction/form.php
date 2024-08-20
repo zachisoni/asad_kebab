@@ -6,7 +6,7 @@
   <form method="post" enctype="multipart/form-data"
     action="<?= isset($members) ? base_url('transaction/add_transaction') :base_url('transaction/add_stock'); ?>" 
     class="rounded-xl bg-white shadow-lg py-10 flex flex-col items-center px-6">
-    <input type="text" name="size" id="size" hidden>
+    <input type="number" name="size" id="size" hidden value='0'>
     <h1 class="text-2xl font-bold mb-6">
       <?= isset($members) ? 'Add Selling Transaction' : 'Add Stock';?>
     </h1>
@@ -49,9 +49,11 @@
               <?php 
               foreach($menus as $menu):
                 if(isset($members)) :
+                  $i = 0;
                   if($menu->fin_amount > 0):?>
-                    <option value="<?= $menu->id ?>"><?= $menu->id." - ".$menu->menu_name; ?></option>
+                    <option value="<?= $menu->id ?>" id="<?= $i; ?>"><?= $menu->id." - ".$menu->menu_name; ?></option>
               <?php 
+                  $i++;
                   endif;
                 else:?>
                 <option value="<?= $menu->id ?>"><?= $menu->id." - ".$menu->menu_name; ?></option>
@@ -68,11 +70,11 @@
           </td>
           <td class="border border-collapse border-sky-500">
             <input type="number" name="amount[0]" id="amount[0]" min="0" value="0"
-              class="amount m-auto p-2 w-1/4 bg-slate-100 rounded-lg focus:border-none focus:outline-sky-400 text-right">
+              class="amount m-2 p-2 w-1/2 bg-slate-100 rounded-lg focus:border-none focus:outline-sky-400 text-right">
             Unit(s)
           </td>
-          <td class="border border-collapse border-sky-500">Rp
-            <input type="number" class="total w-1/2 focus:border-none border-none p-2 rounded-lg" id="total[0]" disabled>
+          <td class="border border-collapse border-sky-500">
+            <p class="total w-full focus:border-none border-none p-2 rounded-lg" id="total[0]">Rp 0</p>
           </td>
         </tr>
       </tbody>
@@ -103,83 +105,95 @@
   const sizeElement = document.getElementById(`size`);
   const addButton = document.getElementById('addRow');
   const totalTransaction = document.getElementById('totalTransaction');
-  const totalRows = document.getElementsByClassName('total');
   const tbody = document.getElementById('table-body');
+
+  const menuId0 = document.getElementById(`menu_id[0]`);
+  const totalRow0 = document.getElementById(`total[0]`);
+  const amount0 = document.getElementById(`amount[0]`);
+  const cost0 = document.getElementById(`cost[0]`);
+
+  const amounts = [0]
+  const costs = [0]
+  const totals = [0]
+
+  <?php if(isset($members)) :?> 
+    const menus = {
+    <?php foreach ($menus as $menu ):?> 
+      <?=$menu->id?> : [
+        <?= $menu->fin_amount ?>,
+        <?= $menu->price ?>
+      ],
+    <?php endforeach;?>
+    };
+    document.addEventListener('DOMContentLoaded', () => {
+      setPrice(cost0, menuId0, 0);
+      setTotalPerRow(totalRow0, 0);
+      <?php if (isset($members)) : ?>
+        amount0.max = menus[menuId0.value][0];
+      <?php endif; ?>
+    })
+  <?php endif; ?>
+
+
+  cost0.addEventListener('change', () => {
+    setCost(cost0, 0);
+    setTotalPerRow(totalRow0, 0);
+  });
+  amount0.addEventListener('change', () => {
+    setAmount(amount0, 0);
+    setTotalPerRow(totalRow0, 0);
+  });
+
+  menuId0.addEventListener('change', () => {
+    setPrice(cost0, menuId0, 0);
+    setTotalPerRow(totalRow0, 0);
+    <?php if (isset($members)) : ?>
+      amount0.max = menus[menuId0.value][0];
+      if (amount0.value > menus[menuId0.value][0]) {
+        amount0.value = menus[menuId0.value][0];
+      }
+    <?php endif;?>
+  });
   
   let size = 1;
   let total = 0.0;
   sizeElement.value = size;
 
-<?php if (isset($menus[0]->price)) : ?>
-  let max_values = [
-    <?php foreach($menus as $menu) :?>
-      <?= $menu->fin_amount; ?>,
-    <?php endforeach;?>
-  ];
+  function setTotalPerRow(totalElement, id){
+    const totalThisRow = amounts[id] * costs[id]
+    // const totalElement = document.getElementById(`total[${id}]`)
+    totals[id] = (totalThisRow);
+    totalElement.innerText = 'Rp ' + totalThisRow.toLocaleString('id-ID')
+    setTotal();
+  }
 
-  
-  tbody.addEventListener('click', event => {
-    totalTransaction.innerText = 'Rp ' + total;
-    console.log('total : '+total);
-  });
+  function setPrice(costElement, element, id){
+    costElement.value = menus[element.value][1];
+    costs[id] = menus[element.value][1];
+  }
 
-  let prices = [
-    <?php foreach ($menus as $menu ):?> 
-      <?= $menu->price?>,
-      <?php endforeach;?>
-    ];
-    
-  <?php endif;?>
-  setValue();
+  function setTotal(){
+    total = 0
+    totals.forEach(element => {
+      total += element
+    });
 
-  function setValue() {
-    let totalInRow = 0.0
-    for(let i = 0; i < size; i++){
-      let menuId = document.getElementById(`menu_id[${i}]`);
-      let totalRow = document.getElementById(`total[${i}]`);
-      let amount = document.getElementById(`amount[${i}]`);  
-      let cost = document.getElementById(`cost[${i}]`);
-      let zero = document.getElementById(`zeros[${i}]`);
-      console.log(cost.id)
-      
-      <?php if (isset($menus[0]->price)) : ?>
-          document.addEventListener('DOMContentLoaded', event=>{
-          cost.value = prices[menuId.value - 1];
-        })
-      <?php endif;?>
-      
-      cost.addEventListener('click', event => {
-        setPrice();
-        
-      });
+    totalTransaction.innerText = 'Rp ' + (Number(total).toLocaleString('id-ID'));
+  }
 
-      cost.addEventListener('change', event=>{
-        setTotalCost();
-      });
-      
-      amount.addEventListener('change', event => {
-        setTotalCost();
-      });
-      
-      function setTotalCost() {
-        totalInRow = (cost.value * amount.value);
-        totalRow.value = totalInRow;
-      }
+  function setCost(element, id){
+    costs[id] = (element.value)
+  }
 
-      function setPrice(){
-        <?php if (isset($menus[0]->price)) : ?>
-          amount.max = max_values[menuId.value - 1];
-          cost.value = prices[menuId.value - 1];
-          <?php endif;?>
-          totalInRow = (cost.value * amount.value);
-          totalRow.value = totalInRow;
-      }
-
-      total += totalInRow;
-    }
+  function setAmount(element, id){
+    amounts[id] = (element.value)
   }
 
   function addRow(){
+    const id = size;
+    costs.push(0);
+    amounts.push(0);
+    totals.push(0);
     const row = document.createElement('tr');
 
     row.innerHTML = `<?php if(isset($members)) : ?>
@@ -215,33 +229,75 @@
     row.appendChild(menu_td);
 
     const cost_td = document.createElement('td');
-    cost_td.innerHTML = `<input type="number" name="cost[${size}]" id="cost[${size}]" min="0" value="0" 
-                          <?= isset($members) ? 'readonly' : ''; ?>
-                          class="cost my-2 p-2 w-1/2 bg-slate-100 rounded-lg focus:border-none focus:outline-sky-400 text-right">/ Unit`;
+    const cost_input = document.createElement('input')
+    cost_input.type = 'number'
+    cost_input.name = `cost[${id}]`
+    cost_input.id = `cost[${id}]`
+    cost_input.className = 'cost my-2 p-2 w-1/2 bg-slate-100 rounded-lg focus:border-none focus:outline-sky-400 text-right'
+    cost_input.readOnly = <?= isset($members) ? true : false; ?>;
+    cost_input.min = 0;
+    cost_input.value = 0;
     cost_td.classList.add("flex","items-center","justify-center","border","border-collapse","border-sky-500");
-    row.appendChild(cost_td);
 
     const amount_td = document.createElement('td');
+    const amount_input = document.createElement('input')
+    amount_input.type = 'number'
+    amount_input.name = `amount[${id}]`
+    amount_input.id = `amount[${id}]`
+    amount_input.className = 'amount m-2 p-2 w-1/2 bg-slate-100 rounded-lg focus:border-none focus:outline-sky-400 text-right'
+    amount_input.min = 0;
+    amount_input.value = 0;
     amount_td.classList.add("border","border-collapse","border-sky-500");
-    amount_td.innerHTML = `<input type="number" name="amount[${size}]" id="amount[${size}]" min="0" value="0"
-                            class="amount m-auto p-2 w-1/4 bg-slate-100 rounded-lg focus:border-none focus:outline-sky-400 text-right">
-                          Unit(s)`;
-    row.appendChild(amount_td);
 
     const total_td = document.createElement('td');
     total_td.classList.add("border","border-collapse","border-sky-500");
     const total_element = document.createElement('p');
-    total_element.classList.add("text-lg","total");
-    total_element.id = `total[${size}]`;
+    total_element.className = 'total w-full focus:border-none border-none p-2 rounded-lg';
+    total_element.id = `total[${id}]`;
     total_element.innerText = 'Rp 0';
+
+    function amount_change() {
+      setAmount(amount_input, id);
+      setTotalPerRow(total_element, id);
+    }
+
+    function cost_change() {
+      setCost(cost_input, id);
+      setTotalPerRow(total_element, id);
+    }
+
+    cost_input.addEventListener('change', cost_change)
+    amount_input.addEventListener('change', amount_change)
+    menu_element.addEventListener('change', () => {
+      setPrice(cost_input, menu_element, id);
+      setTotalPerRow(total_element, id);
+      <?php if (isset($members)) : ?>
+        amount_input.max = menus[menu_element.value][0];
+        if (amount_input.value > menus[menu_element.value][0]) {
+          amount_input.value = menus[menu_element.value][0];
+        }
+      <?php endif; ?>
+    })
+
+    cost_td.appendChild(cost_input)
+    cost_td.appendChild(document.createTextNode('/Unit'));
+    row.appendChild(cost_td);
+
+    amount_td.appendChild(amount_input)
+    amount_td.appendChild(document.createTextNode('Unit(s)'));
+    row.appendChild(amount_td);
+
     total_td.appendChild(total_element);
     row.appendChild(total_td);
+
+    // menu_element.addEventListener('selected', ()=> {
+    //   setPrice(cost_input, menu_element, id);
+    // })
 
     tbody.appendChild(row);
     
     size ++;
     sizeElement.value = size;
-    setValue();
   }
 </script>
 
