@@ -4,6 +4,11 @@
 ---
 A Restaurant themed Point of Sales web application to manage menus, make transactions, and view the insight about our restaurant. Made with Code Igniter
 
+## Access the Web
+----
+To access the deployed web, visit : https://asad-kebab.vercel.app
+
+
 ## Instalation
 ---
 To install and run this web app in your computer, make sure you have installed these programs:
