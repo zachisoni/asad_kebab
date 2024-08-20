@@ -30,7 +30,7 @@ class Menu extends BaseController
     public function menuDetail($id){
         if(empty($id)){
             $this->session->setFlashdata('error_message','Unknown Data ID.') ;
-            return redirect()->to('/');
+            return redirect()->to(base_url());
         }
         $query = $this->menuModel->select('*')->where('id', $id);
         $data['details'] = $query->first();

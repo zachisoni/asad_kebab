@@ -1,7 +1,7 @@
 <?= $this->extend('./layouts/template'); ?>
 <?= $this->section('content'); ?>
 <article class="flex flex-col justify-center items-center">
-  <div id="print">
+  <div id="print" class="bg-white p-6">
     <h1 style="font-size:1.5rem; text-align:center;line-height: 1.75rem;" class="font-bold">Asad Kebab</h1>
     <hr class="my-4">
     <h1 style="font-size:1.25rem; text-align: center;line-height: 1.5rem;" class="font-bold">
@@ -53,11 +53,17 @@
         <td style="padding:1rem;" class="rupiah"><?= $header[0]->total_cost; ?></td>
       </tr>
     </table>
-    <script src="https://cdn.tailwindcss.com"></script>
   </div>
-  <a href="#" class="px-6 py-2 my-6 bg-blue-600 text-white rounded-lg" id='print-btn'>
-    Print
-  </a>
+  <div class="flex justify-between w-1/3">
+
+    <a href="<?= str_contains(current_url(), 'purchases')? base_url('purchases') : base_url('sellings')?>" 
+        class="px-6 py-2 my-2 mx-3 bg-green-600 text-white rounded-lg">
+      Back
+    </a>
+    <a href="#" class="px-6 py-2 my-2 mx-3 bg-blue-600 text-white rounded-lg" id='print-btn'>
+      Print
+    </a>
+  </div>
 </article>
 
 <script>

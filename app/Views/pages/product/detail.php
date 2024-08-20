@@ -8,9 +8,7 @@
     class="h-96 w-96 object-cover rounded-xl mx-10">
     <div class="bg-white rounded-xl shadow-lg w-3/4 px-10 py-6 flex flex-col items-center">
       <h2 class="text-2xl font-bold mt-5 w-full"><?= $details['menu_name'] ?></h2>
-      <h3 class="text-xl font-semibold w-full text-orange-600">
-        <?="Rp ".$details['price']; ?>
-      </h3>
+      <h3 class="text-xl font-semibold w-full text-orange-600" id='price'><?=$details['price']; ?></h3>
       <h3 class="text-sky-600 text-xl font-semibold w-full mb-2 mt-4">Stock : <?= $details['fin_amount'] ?></h3>
       <?php if(session("isLoggedIn") && session("role") == 1):?>
         <h3 class="text-pink-600 text-xl font-semibold w-full mb-2">Sellings : <?= $details['selling'] ?></h3>
@@ -35,8 +33,8 @@
 </article>
 
 <script>
-  const menuId = document.getElementById('menu_id');
-  const menuName = document.getElementById('menu_name');
+  const price = document.getElementById('price');
+  price.innerText = 'Rp ' + Number(price.innerText).toLocaleString('id-ID')
 </script>
 
 <?= $this->endSection();?>

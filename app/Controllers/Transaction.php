@@ -37,7 +37,7 @@ class Transaction extends BaseController{
     public function purchaseDetail($id){
         $userModel = new UserModel();
         $data['title'] = 'Asad Kebab | Transaction Detail';
-        $data['header'] = $this->transactionsModel->select('transactions.id, users.fullname, total_cost, timestamp, transaction_type')->join('users', 'users.id = employee_id')->where('transactions.id',$id)->get()->getResult();
+        $data['header'] = $this->transactionsModel->select('users.id, users.fullname, total_cost, timestamp, transaction_type')->join('users', 'users.id = employee_id')->where('transactions.id',$id)->get()->getResult();
         $data['details'] = $this->purchasesModel->orderBy('id ASC')->select('purchases.id, menus.menu_name, purchases.price, amount, total_cost')->join('menus', 'menus.id = menu_id')->where('transaction_id', $id)->get()->getResult();
         return view('pages/transaction/detail', $data);
     }
@@ -83,7 +83,7 @@ class Transaction extends BaseController{
                 'total_cost' => $cost * $amount,
             ];
             
-            $this->purchasesModel->save($purchase);
+            $this->purchasesModel->insert($purchase);
 
             $quantity = $menuModel->select('fin_amount, purchase')->where('id', $this->request->getVar("menu_id[$i]"))->first();
             $final_amount = $quantity['fin_amount'] + $amount;
@@ -96,17 +96,9 @@ class Transaction extends BaseController{
             ];
             $menuModel->save($menus);  
         }
-        
-        $menuModel->save($menus);   
-
-        // $purchase['timestamp'] = date('d-m-Y H:i:s');
-
-        // $purchase['title'] = 'Invoice';
-        // $purchase['type'] = 'Purchase';
-        // $purchase['menu_name'] = $menuModel->select('menu_name')->where('id', $this->request->getVar('menu_id'))->first();
-        
-        // $this->generatePdf('pages/transaction/invoice', $purchase);
-        return redirect()->to('purchases');
+          
+        $insertID = $this->transactionsModel->getInsertID();
+        return redirect()->to(base_url('purchases/detail/'. $insertID));
     }
 
     public function sellingData(){
@@ -118,7 +110,7 @@ class Transaction extends BaseController{
     public function sellingDetail($id){
         $userModel = new UserModel();
         $data['title'] = 'Asad Kebab | Transaction Detail';
-        $data['header'] = $this->transactionsModel->select('transactions.id, users.fullname, total_cost, timestamp, transaction_type')->join('users', 'users.id = employee_id')->where('transactions.id',$id)->get()->getResult();
+        $data['header'] = $this->transactionsModel->select('users.id, users.fullname, total_cost, timestamp, transaction_type')->join('users', 'users.id = employee_id')->where('transactions.id',$id)->get()->getResult();
         $data['details'] = $this->sellingModel->orderBy('id ASC')->select('sellings.id, menus.menu_name, menus.price, amount, total_cost')->join('menus', 'menus.id = menu_id')->where('transaction_id', $id)->get()->getResult();
         // dd($data);
         return view('pages/transaction/detail', $data);
@@ -136,15 +128,6 @@ class Transaction extends BaseController{
 
     public function addTransaction(){
         $size = $this->request->getVar('size');
-
-        // $rules = [
-        //     'menu_id' => 'required',
-        //     'amount' => 'required',
-        // ];
-
-        // if(!$this->validate($rules)){
-        //     return redirect()->back()->withInput(validation_errors());
-        // }
 
         $menuModel = new MenusModel();
         $total_cost = 0;
@@ -180,7 +163,7 @@ class Transaction extends BaseController{
                 'total_cost' => $cost['price'] * $amount,
             ];
 
-            $this->sellingModel->save($selling);
+            $this->sellingModel->insert($selling);
 
             $quantity = $menuModel->select('fin_amount, selling')->where('id', $this->request->getVar("menu_id[$i]"))->first();
             $final_amount = $quantity['fin_amount'] - $amount;
@@ -194,46 +177,10 @@ class Transaction extends BaseController{
             $menuModel->save($menus);   
             
         }
-        
 
-        // $cost = $this->request->getVar('cost');
-        // $amount = $this->request->getVar('amount');
-        // $total_cost = $cost * $amount;
+        $insertID = $this->transactionsModel->getInsertID();
 
-        // $selling = [
-        //     'menu_id' => $this->request->getVar('menu_id'),
-        //     'amount' => $amount,
-        //     'cost' => $cost,
-        //     'total_cost' => $total_cost,
-        //     'employee_id' => session('id'),
-        // ];
-
-        // if($this->request->getVar('member_id') != 0){
-        //     $selling['user_id'] = $this->request->getVar('member_id');
-        // }
-
-        // $quantity = $menuModel->select('fin_amount')->where('id', $this->request->getVar('menu_id'))->first();
-        // $final_amount = $quantity['fin_amount'] - $amount;
-
-        // $menus = [
-        //     'id' => $this->request->getVar('menu_id'),
-        //     'selling' => $amount,
-        //     'fin_amount' => $final_amount
-        // ];
-
-        // $this->sellingModel->save($selling);
-        // $selling['timestamp'] = date('d-m-Y H:i:s'); 
-        // $menuModel->save($menus);
-
-        // $userModel = new UserModel();
-
-        // $selling['title'] = 'Invoice';
-        // $selling['employee_name'] = $userModel->select('username')->where('id', session('id'))->first();
-        // $selling['menu_name'] = $menuModel->select('menu_name')->where('id', $this->request->getVar('menu_id'))->first();
-        // $selling['type'] = 'Selling';
-
-        // $this->generatePdf('pages/transaction/invoice', $selling);
-        return redirect()->to('sellings');
+        return redirect()->to(base_url('sellings/detail/'. $insertID));
     }
 
     // public function generatePdf($pages, $data){

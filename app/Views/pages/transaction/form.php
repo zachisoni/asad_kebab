@@ -126,9 +126,9 @@
     <?php endforeach;?>
     };
     document.addEventListener('DOMContentLoaded', () => {
-      setPrice(cost0, menuId0, 0);
       setTotalPerRow(totalRow0, 0);
       <?php if (isset($members)) : ?>
+        setPrice(cost0, menuId0, 0);
         amount0.max = menus[menuId0.value][0];
       <?php endif; ?>
     })
@@ -145,9 +145,9 @@
   });
 
   menuId0.addEventListener('change', () => {
-    setPrice(cost0, menuId0, 0);
     setTotalPerRow(totalRow0, 0);
     <?php if (isset($members)) : ?>
+      setPrice(cost0, menuId0, 0);
       amount0.max = menus[menuId0.value][0];
       if (amount0.value > menus[menuId0.value][0]) {
         amount0.value = menus[menuId0.value][0];
@@ -167,10 +167,12 @@
     setTotal();
   }
 
+  <?php if(isset($members)) :?> 
   function setPrice(costElement, element, id){
     costElement.value = menus[element.value][1];
     costs[id] = menus[element.value][1];
   }
+  <?php endif; ?>
 
   function setTotal(){
     total = 0
@@ -234,17 +236,17 @@
     cost_input.name = `cost[${id}]`
     cost_input.id = `cost[${id}]`
     cost_input.className = 'cost my-2 p-2 w-1/2 bg-slate-100 rounded-lg focus:border-none focus:outline-sky-400 text-right'
-    cost_input.readOnly = <?= isset($members) ? true : false; ?>;
+    cost_input.readOnly = <?= isset($members) ? 'true' : 'false' ?>;
     cost_input.min = 0;
     cost_input.value = 0;
     cost_td.classList.add("flex","items-center","justify-center","border","border-collapse","border-sky-500");
 
     const amount_td = document.createElement('td');
     const amount_input = document.createElement('input')
-    amount_input.type = 'number'
-    amount_input.name = `amount[${id}]`
-    amount_input.id = `amount[${id}]`
-    amount_input.className = 'amount m-2 p-2 w-1/2 bg-slate-100 rounded-lg focus:border-none focus:outline-sky-400 text-right'
+    amount_input.type = 'number';
+    amount_input.name = `amount[${id}]`;
+    amount_input.id = `amount[${id}]`;
+    amount_input.className = 'amount m-2 p-2 w-1/2 bg-slate-100 rounded-lg focus:border-none focus:outline-sky-400 text-right';
     amount_input.min = 0;
     amount_input.value = 0;
     amount_td.classList.add("border","border-collapse","border-sky-500");

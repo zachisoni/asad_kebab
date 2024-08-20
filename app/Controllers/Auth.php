@@ -62,7 +62,7 @@ class Auth extends BaseController
 
                 // Redirect ke halaman utama
                 if(session('role') == 1){
-                    return redirect()->to('/dashboard');
+                    return redirect()->to(base_url('dashboard'));
                 }else {
                     return redirect()->to(base_url());
                 }
@@ -109,7 +109,7 @@ class Auth extends BaseController
             
             //Jika tidak tervalidasi, maka tampilkan halaman register
             //dan sematkan error dari validasinya. 
-            return redirect()->to('/register')->withInput(validation_errors());
+            return redirect()->to(base_url('register'))->withInput(validation_errors());
         
         } else {
 
@@ -126,13 +126,13 @@ class Auth extends BaseController
             // Equivalen INSERT INTO USER VALUES ($DATA)
             $userModel->save($data);
 
-            return redirect()->to('login');
+            return redirect()->to(base_url('login'));
         }
     }
 
     public function logout()
     {
         session()->destroy();
-        return redirect()->to(url_to('login'));
+        return redirect()->to(base_url('login'));
     }
 }

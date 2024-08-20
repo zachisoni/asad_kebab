@@ -18,12 +18,12 @@
     <thead class="text-xl bg-sky-500 font-semibold text-white">
       <tr>
         <th class="px-3 py-2 border border-slate-300 border-colapse">ID</th>
-        <?php if(isset($selling)) : ?>
-          <th class="px-3 py-2 border border-slate-300 border-colapse">Member ID</th>
-          <th class="px-3 py-2 border border-slate-300 border-colapse">Employee ID</th>
-        <?php endif;?>
+        <th class="px-3 py-2 border border-slate-300 border-colapse">Employee ID</th>
         <th class="px-3 py-2 border border-slate-300 border-colapse">Total Cost</th>
         <th class="px-4 py-2 border border-slate-300 border-colapse">Timestamp</th>
+        <?php if(isset($selling)) : ?>
+          <th class="px-3 py-2 border border-slate-300 border-colapse">Member ID</th>
+        <?php endif;?>
         <th class="px-3 py-2 border border-slate-300 border-colapse">Action</th>
       </tr>
     </thead>
@@ -33,20 +33,22 @@
         foreach($purchase as $data): ?>
         <tr>
           <td class="border border-slate-300 border-colapse"><?= $data->id; ?></td>
+          <td class="border border-slate-300 border-colapse"><?= $data->employee_id; ?></td>
           <td class="border border-slate-300 border-colapse total_cost"><?= $data->total_cost?></td>
           <td class="px-3 border border-slate-300 border-colapse"><?= $data->timestamp; ?></td>
           <td class="px-3 py-2 border border-slate-300 border-colapse">
             <a href="<?= base_url('purchases/detail/').$data->id ?>" class="font-bold text-blue-600 px-6 py-2 rounded-xl">Details</a>
           </td>
         </tr>
-      <?php endforeach; else : 
+      <?php endforeach; 
+        else : 
         foreach($selling as $data): ?>
           <tr>
             <td class="border border-slate-300 border-colapse"><?= $data->id; ?></td>
-            <td class="border border-slate-300 border-colapse"><?= $data->user_id; ?></td>
             <td class="border border-slate-300 border-colapse"><?= $data->employee_id; ?></td>
             <td class="border border-slate-300 border-colapse total_cost"><?= $data->total_cost?></td>
             <td class="px-3 border border-slate-300 border-colapse"><?= $data->timestamp; ?></td>
+            <td class="border border-slate-300 border-colapse"><?= $data->user_id; ?></td>
             <td class="px-3 py-2 border border-slate-300 border-colapse">
               <a href="<?= base_url('sellings/detail/').$data->id ?>" class="font-bold text-blue-600 px-6 py-2 rounded-xl">Details</a>
             </td>
